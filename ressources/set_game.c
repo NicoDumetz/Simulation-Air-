@@ -104,6 +104,16 @@ static int set_allplane(struct game *game, char **settings, sfTexture
     return 7;
 }
 
+static void set_text_fps(struct game *game)
+{
+    game->frame = sfText_create();
+    game->clock_fps = sfClock_create();
+    sfText_setFont(game->frame, game->font);
+    sfText_setCharacterSize(game->frame, 30);
+    sfText_setPosition(game->frame, (sfVector2f){1700, 130});
+    sfText_setFillColor(game->frame, sfWhite);
+}
+
 static void set_text(struct game *game)
 {
     game->font = sfFont_createFromFile("font/arial.ttf");
@@ -124,6 +134,7 @@ static void set_text(struct game *game)
     sfText_setPosition(game->onhit, (sfVector2f){1700, 90});
     sfText_setFillColor(game->onhit, sfWhite);
     sfText_setString(game->onhit, "Hitbox: ON");
+    set_text_fps(game);
 }
 
 void set_plane_tower(struct game *game, char **settings)

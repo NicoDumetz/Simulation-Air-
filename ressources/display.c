@@ -84,12 +84,28 @@ static void display_time(struct game *game)
     sfRenderWindow_drawText(game->window, game->time, NULL);
 }
 
+static void display_fps(struct game *game)
+{
+    sfTime elapsed = sfClock_getElapsedTime(game->clock_fps);
+    float val = sfTime_asSeconds(elapsed);
+    char buffer[100];
+    int fps = 1.0f / val;
+
+    sfClock_restart(game->clock_fps);
+    buffer[0] = '\0';
+    my_strcat(buffer, "FPS ");
+    my_strcat(buffer, int_to_str(fps));
+    sfText_setString(game->frame, buffer);
+    sfRenderWindow_drawText(game->window, game->frame, NULL);
+}
+
 void display(struct game *game)
 {
     sfRenderWindow_drawSprite(game->window, game->background.sprite, NULL);
     display_tower(game);
     display_plane(game);
     display_time(game);
+    display_fps(game);
     sfRenderWindow_drawText(game->window, game->onspr, NULL);
     sfRenderWindow_drawText(game->window, game->onhit, NULL);
     sfRenderWindow_display(game->window);

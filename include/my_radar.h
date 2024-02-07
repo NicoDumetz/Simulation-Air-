@@ -60,7 +60,9 @@ typedef struct game {
     sprite *tower;
     sprite *plane;
     sfClock *clock;
+    sfClock *clock_fps;
     sfText *time;
+    sfText *frame;
     sfText *onspr;
     sfText *onhit;
     sfFont* font;

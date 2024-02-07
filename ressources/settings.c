@@ -49,8 +49,9 @@ static int ver_plane(char **settings, int *i)
 
 static int ver_tower(char **settings, int *i)
 {
-    if (check_num(settings[*i + 1]) == 1 || check_num(settings[*i + 2]) ==
-    1 || check_num(settings[*i + 3]) == 1)
+    if (settings[*i] == NULL || settings[*i + 1] == NULL || settings[*i + 2]
+    == NULL || settings[*i + 3] == NULL || check_num(settings[*i + 1]) ==
+    1 || check_num(settings[*i + 2]) == 1 || check_num(settings[*i + 3]) == 1)
         return 84;
     *i += 4;
     return 0;
@@ -58,11 +59,12 @@ static int ver_tower(char **settings, int *i)
 
 static int ver_plane_tower(char **settings, int *i)
 {
-    if (settings[*i][0] == 'A' && ver_plane(settings, i) == 84) {
+    if (settings[*i][0] == 'A' && ver_plane(settings, i) == 84)
         return 84;
-    } else if (settings[*i][0] == 'T' && ver_tower(settings, i) == 84) {
+    if (settings[*i] == NULL)
+        return 0;
+    if (settings[*i][0] == 'T' && ver_tower(settings, i) == 84)
         return 84;
-    }
     return 0;
 }
 
@@ -74,5 +76,7 @@ int verify_instr(char **settings)
         if (ver_plane_tower(settings, &i) == 84)
             return 84;
     }
+    if (compt_plane(settings) > 10500)
+        return 84;
     return 0;
 }
