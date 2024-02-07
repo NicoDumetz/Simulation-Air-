@@ -67,13 +67,11 @@ void cleanup_game(struct game *g)
     sfTexture_destroy(g->background.texture);
     sfSprite_destroy(g->background.sprite);
     for (int i = 0; i < g->nbr_tower; i++) {
-        sfTexture_destroy(g->tower[i].texture);
         sfSprite_destroy(g->tower[i].sprite);
         sfCircleShape_destroy(g->tower[i].hitbox.circle);
     }
     free(g->tower);
     for (int i = 0; i < g->nbr_plane; i++) {
-        sfTexture_destroy(g->plane[i].texture);
         sfSprite_destroy(g->plane[i].sprite);
         sfClock_destroy(g->plane[i].clock);
         sfRectangleShape_destroy(g->plane[i].hitbox.rect);

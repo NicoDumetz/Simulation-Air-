@@ -86,5 +86,6 @@ sfVector2f *set_rotation(sfVector2f *cornersrect, float get_angle,
     sfVector2f pos);
 char *int_to_str(int nb);
 void free_array(char **arr);
+int verify_instr(char **settings);
 
 #endif

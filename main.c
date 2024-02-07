@@ -99,5 +99,7 @@ int main(int ac, char **av, char **env)
     if (check_env(env) == 84 || ac != 2 || verify_file(av) == 84)
         return 84;
     settings = open_script(av);
+    if (verify_instr(settings) == 84)
+        return 84;
     return my_radar(settings);
 }

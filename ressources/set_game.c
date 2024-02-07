@@ -22,13 +22,18 @@ static void set_background(struct game *game)
 
 static void set_hitbox_tower(struct game *game, int j, int i, char **settings)
 {
+    sfVector2f ori = sfSprite_getOrigin(game->tower[i].sprite);
+    sfVector2f posi = sfSprite_getPosition(game->tower[i].sprite);
+    sfVector2f sca = sfSprite_getScale(game->tower[i].sprite);
+
     game->tower[i].hitbox.circle = sfCircleShape_create();
-    game->tower[i].hitbox.radius = my_getnbr(settings[j + 3]);
+    game->tower[i].hitbox.radius = my_getnbr(settings[j + 3]) * (1920 / 100);
     sfCircleShape_setRadius(game->tower[i].hitbox.circle, game->tower[i].
     hitbox.radius);
-    game->tower[i].hitbox.pos = (sfVector2f){(game->tower[i].pos.x + (512
-    * 0.1) / 2) - game->tower[i].hitbox.radius, (game->tower[i].pos.y +
-    (512 * 0.1) / 2) - game->tower[i].hitbox.radius};
+    game->tower[i].hitbox.pos.x = posi.x - ori.x * sca.x + (ori.x * 2 * sca.x
+    - game->tower[i].hitbox.radius * 2) / 2;
+    game->tower[i].hitbox.pos.y = posi.y - ori.y * sca.y + (ori.y * 2 * sca.y
+    - game->tower[i].hitbox.radius * 2) / 2;
     sfCircleShape_setPosition(game->tower[i].hitbox.circle, game->tower
     [i].hitbox.pos);
     sfCircleShape_setOutlineThickness(game->tower[i].hitbox.circle, 1.0f);
@@ -37,24 +42,24 @@ static void set_hitbox_tower(struct game *game, int j, int i, char **settings)
     0, 0, 0});
 }
 
-static void set_alltower(struct game *game, char **settings)
+static int set_alltower(struct game *game, char **settings, sfTexture
+    *texture, int i)
 {
-    int j = game->nbr_plane * 7;
+    int j = i;
+    sfVector2u textureSize = sfTexture_getSize(texture);
+    sfVector2f origin = {(float)textureSize.x / 2, (float)textureSize.y / 2};
 
-    for (int i = 0; i < game->nbr_tower; i++) {
-        game->tower[i].texture = sfTexture_createFromFile
-        ("./sprite/tower.png", NULL);
-        game->tower[i].sprite = sfSprite_create();
-        game->tower[i].pos = (sfVector2f){my_getnbr(settings[j + 1]),
-        my_getnbr(settings[j + 2])};
-        game->tower[i].scale = (sfVector2f){0.1, 0.1};
-        sfSprite_setScale(game->tower[i].sprite, game->tower[i].scale);
-        sfSprite_setTexture(game->tower[i].sprite, game->tower[i].texture,
-        sfTrue);
-        sfSprite_setPosition(game->tower[i].sprite, game->tower[i].pos);
-        set_hitbox_tower(game, j, i, settings);
-        j += 4;
-    }
+    for (i = 0; game->tower[i].sprite; i++);
+    game->tower[i].sprite = sfSprite_create();
+    game->tower[i].pos = (sfVector2f){my_getnbr(settings[j + 1]),
+    my_getnbr(settings[j + 2])};
+    game->tower[i].scale = (sfVector2f){0.1, 0.1};
+    sfSprite_setOrigin(game->tower[i].sprite, origin);
+    sfSprite_setScale(game->tower[i].sprite, game->tower[i].scale);
+    sfSprite_setTexture(game->tower[i].sprite, texture, sfTrue);
+    sfSprite_setPosition(game->tower[i].sprite, game->tower[i].pos);
+    set_hitbox_tower(game, j, i, settings);
+    return 4;
 }
 
 static int set_hitbox_plane(struct game *game, int i)
@@ -75,31 +80,28 @@ static int set_hitbox_plane(struct game *game, int i)
     sfRectangleShape_setFillColor(game->plane[i].hitbox.rect, (sfColor)
     {0, 0, 0, 0});
     sfRectangleShape_rotate(game->plane[i].hitbox.rect, game->plane[i].angle);
-    return 7;
 }
 
-static void set_allplane(struct game *game, char **settings)
+static int set_allplane(struct game *game, char **settings, sfTexture
+    *texture, int i)
 {
-    int j = 0;
+    int j = i;
 
-    for (int i = 0; i < game->nbr_plane; i++) {
-        game->plane[i].posfin = (sfVector2f){my_getnbr(settings[j + 3]),
-        my_getnbr(settings[j + 4])};
-        game->plane[i].speed = my_getnbr(settings[j + 5]);
-        game->plane[i].delay = my_getnbr(settings[j + 6]);
-        game->plane[i].texture = sfTexture_createFromFile
-        ("./sprite/plane.png", NULL);
-        game->plane[i].sprite = sfSprite_create();
-        game->plane[i].pos = (sfVector2f){my_getnbr(settings[j + 1]),
-        my_getnbr(settings[j + 2])};
-        game->plane[i].scale = (sfVector2f){0.08, 0.08};
-        game->plane[i].clock = sfClock_create();
-        game->plane[i].actif = game->plane[i].delay == 0 ? 1 : 0;
-        sfSprite_setScale(game->plane[i].sprite, game->plane[i].scale);
-        sfSprite_setTexture(game->plane[i].sprite, game->plane[i].texture,
-        sfTrue);
-        j += set_hitbox_plane(game, i);
-    }
+    for (i = 0; game->plane[i].sprite; i++);
+    game->plane[i].posfin = (sfVector2f){my_getnbr(settings[j + 3]),
+    my_getnbr(settings[j + 4])};
+    game->plane[i].speed = my_getnbr(settings[j + 5]);
+    game->plane[i].delay = my_getnbr(settings[j + 6]);
+    game->plane[i].sprite = sfSprite_create();
+    game->plane[i].pos = (sfVector2f){my_getnbr(settings[j + 1]),
+    my_getnbr(settings[j + 2])};
+    game->plane[i].scale = (sfVector2f){0.08, 0.08};
+    game->plane[i].clock = sfClock_create();
+    game->plane[i].actif = game->plane[i].delay == 0 ? 1 : 0;
+    sfSprite_setScale(game->plane[i].sprite, game->plane[i].scale);
+    sfSprite_setTexture(game->plane[i].sprite, texture, sfTrue);
+    set_hitbox_plane(game, i);
+    return 7;
 }
 
 static void set_text(struct game *game)
@@ -124,6 +126,25 @@ static void set_text(struct game *game)
     sfText_setString(game->onhit, "Hitbox: ON");
 }
 
+void set_plane_tower(struct game *game, char **settings)
+{
+    sfTexture *texture = sfTexture_createFromFile
+    ("./sprite/plane.png", NULL);
+    sfTexture *texture2 = sfTexture_createFromFile
+    ("./sprite/tower.png", NULL);
+
+    for (int i = 0; i < game->nbr_plane; i++)
+        game->plane[i].sprite = NULL;
+    for (int i = 0; i < game->nbr_tower; i++)
+        game->tower[i].sprite = NULL;
+    for (int i = 0; settings[i];) {
+        if (settings[i][0] == 'A')
+            i += set_allplane(game, settings, texture, i);
+        else
+            i += set_alltower(game, settings, texture2, i);
+    }
+}
+
 struct game set_game(char **settings)
 {
     struct game game;
@@ -139,8 +160,7 @@ struct game set_game(char **settings)
     game.plane = malloc(sizeof(sprite) * (game.nbr_plane + 1));
     game.tower = malloc(sizeof(sprite) * (game.nbr_tower + 1));
     set_background(&game);
-    set_allplane(&game, settings);
-    set_alltower(&game, settings);
+    set_plane_tower(&game, settings);
     free_array(settings);
     game.clock = sfClock_create();
     return game;

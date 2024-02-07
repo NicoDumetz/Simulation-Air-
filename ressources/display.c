@@ -7,15 +7,9 @@
 
 #include "../include/my_radar.h"
 
-static float myabs(float a)
+static void check_destroy(struct game *game, int i, float longu)
 {
-    return a < 0 ? -a : a;
-}
-
-static void check_destroy(struct game *game, int i)
-{
-    if (myabs(game->plane[i].pos.x - game->plane[i].posfin.x) < 5.0f &&
-        myabs(game->plane[i].pos.y - game->plane[i].posfin.y) < 5.0f) {
+    if (longu < 5) {
         game->plane[i].actif = 0;
         game->plane[i].delay = 0;
     }
@@ -37,7 +31,7 @@ static int calculate_traj(struct game *game, int i)
     sfSprite_setPosition(game->plane[i].sprite, game->plane[i].pos);
     sfRectangleShape_setPosition(game->plane[i].hitbox.rect, game->plane[i].
     pos);
-    check_destroy(game, i);
+    check_destroy(game, i, longu);
     sfClock_restart(game->plane[i].clock);
     return 0;
 }
