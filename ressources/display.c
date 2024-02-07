@@ -28,15 +28,20 @@ static int calculate_traj(struct game *game, int i)
     sfSprite_setPosition(game->plane[i].sprite, game->plane[i].pos);
     sfRectangleShape_setPosition(game->plane[i].hitbox.rect, game->plane[i].
     pos);
-    if (myabs(game->plane[i].pos.x - game->plane[i].posfin.x) < 1.0f &&
-        myabs(game->plane[i].pos.y - game->plane[i].posfin.y) < 1.0f)
+    if (myabs(game->plane[i].pos.x - game->plane[i].posfin.x) < 5.0f &&
+        myabs(game->plane[i].pos.y - game->plane[i].posfin.y) < 5.0f) {
         game->plane[i].actif = 0;
+        game->plane[i].delay = 0;
+    }
     sfClock_restart(game->plane[i].clock);
     return 0;
 }
 
 static void display_hitplane(struct game *game, int i)
 {
+    if (game->spr == 1)
+        sfRenderWindow_drawSprite(game->window, game->plane[i].sprite,
+        NULL);
     if (game->hit == 1)
         sfRenderWindow_drawRectangleShape(game->window, game->plane
         [i].hitbox.rect, NULL);
@@ -46,8 +51,6 @@ static void display_plane(struct game *game)
 {
     for (int i = 0; i < game->nbr_plane; i++) {
         if (game->plane[i].actif == 1 && calculate_traj(game, i) == 0) {
-            sfRenderWindow_drawSprite(game->window, game->plane[i].sprite,
-            NULL);
             display_hitplane(game, i);
         }
     }
@@ -59,7 +62,9 @@ static void display_tower(struct game *game)
         if (game->hit == 1)
             sfRenderWindow_drawCircleShape(game->window, game->tower[i].
             hitbox.circle, NULL);
-        sfRenderWindow_drawSprite(game->window, game->tower[i].sprite, NULL);
+        if (game->spr == 1)
+            sfRenderWindow_drawSprite(game->window, game->tower[i].sprite,
+            NULL);
     }
 }
 

@@ -45,6 +45,7 @@ typedef struct sprite {
     sfIntRect rect;
     sfClock *clock;
     hitbox hitbox;
+    int delay;
     int actif;
     int speed;
     float angle;
@@ -60,6 +61,7 @@ typedef struct game {
     sprite *plane;
     sfClock *clock;
     int hit;
+    int spr;
     int nbr_plane;
     int nbr_tower;
 } game;
@@ -71,12 +73,12 @@ void display(struct game *game);
 int my_strlen(char const *str);
 char *my_strcat(char *dest, char const *src);
 int my_getnbr(char const *str);
-char **my_str_to_word_array(char const *str);
+char **my_str_to_word_array(char *str);
 int compt_plane(char **settings);
 int compt_tower(char **settings);
 void check_colision_plane(struct game *game);
 void check_tower_col(struct game *game);
-void reset_tower_col(struct game *game);
 sfVector2f *set_rotation(sfVector2f *cornersrect, float get_angle,
     sfVector2f pos);
+
 #endif

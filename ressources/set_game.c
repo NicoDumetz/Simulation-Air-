@@ -85,6 +85,7 @@ static void set_allplane(struct game *game, char **settings)
         game->plane[i].posfin = (sfVector2f){my_getnbr(settings[j + 3]),
         my_getnbr(settings[j + 4])};
         game->plane[i].speed = my_getnbr(settings[j + 5]);
+        game->plane[i].delay = my_getnbr(settings[j + 6]);
         game->plane[i].texture = sfTexture_createFromFile
         ("./sprite/plane.png", NULL);
         game->plane[i].sprite = sfSprite_create();
@@ -92,7 +93,7 @@ static void set_allplane(struct game *game, char **settings)
         my_getnbr(settings[j + 2])};
         game->plane[i].scale = (sfVector2f){0.08, 0.08};
         game->plane[i].clock = sfClock_create();
-        game->plane[i].actif = 1;
+        game->plane[i].actif = game->plane[i].delay == 0 ? 1 : 0;
         sfSprite_setScale(game->plane[i].sprite, game->plane[i].scale);
         sfSprite_setTexture(game->plane[i].sprite, game->plane[i].texture,
         sfTrue);
@@ -110,6 +111,7 @@ struct game set_game(char **settings)
     sfResize | sfClose, NULL);
     game.clock = sfClock_create();
     game.hit = 1;
+    game.spr = 1;
     game.nbr_plane = compt_plane(settings);
     game.nbr_tower = compt_tower(settings);
     game.plane = malloc(sizeof(sprite) * (game.nbr_plane + 1));

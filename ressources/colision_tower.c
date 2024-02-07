@@ -48,10 +48,3 @@ void check_tower_col(struct game *game)
         }
     }
 }
-
-void reset_tower_col(struct game *game)
-{
-    for (int i = 0; i < game->nbr_plane; i++) {
-            game->plane[i].tower_check = 0;
-    }
-}
