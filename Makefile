@@ -31,8 +31,7 @@ $(NAME):	$(OBJ)
 	gcc -o $(NAME) $(OBJ) $(LDFLAGS)
 
 clean:
-	rm *.o
-	cd ressources && rm *.o
+	rm -f $(OBJ)
 
 fclean:		clean
 	rm -f $(NAME)
