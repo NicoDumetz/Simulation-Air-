@@ -17,8 +17,16 @@ void pop_event(struct game *game)
             sfRenderWindow_close(game->window);
         if (event.type == sfEvtKeyPressed && event.key.code == sfKeyL)
             game->hit = game->hit == 1 ? 0 : 1;
+            if (game->hit == 1)
+                sfText_setString(game->onhit, "Hitboxes: ON");
+            else
+                sfText_setString(game->onhit, "Hitboxes: OFF");
         if (event.type == sfEvtKeyPressed && event.key.code == sfKeyS)
             game->spr = game->spr == 1 ? 0 : 1;
+            if (game->spr == 1)
+                sfText_setString(game->onspr, "Sprite: ON");
+            else
+                sfText_setString(game->onspr, "Sprite: OFF");
     }
 }
 
@@ -71,8 +79,9 @@ void cleanup_game(struct game *g)
         sfRectangleShape_destroy(g->plane[i].hitbox.rect);
     }
     free(g->plane);
-    sfFont_destroy(g->font);
     sfText_destroy(g->time);
+    sfText_destroy(g->onspr);
+    sfText_destroy(g->onhit);
     sfRenderWindow_destroy(g->window);
     sfClock_destroy(g->clock);
 }

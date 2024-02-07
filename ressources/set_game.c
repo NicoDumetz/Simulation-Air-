@@ -108,8 +108,20 @@ static void set_text(struct game *game)
     game->time = sfText_create();
     sfText_setFont(game->time, game->font);
     sfText_setCharacterSize(game->time, 30);
-    sfText_setPosition(game->time, (sfVector2f){1750, 10});
+    sfText_setPosition(game->time, (sfVector2f){1700, 10});
     sfText_setFillColor(game->time, sfWhite);
+    game->onspr = sfText_create();
+    sfText_setFont(game->onspr, game->font);
+    sfText_setCharacterSize(game->onspr, 30);
+    sfText_setPosition(game->onspr, (sfVector2f){1700, 50});
+    sfText_setFillColor(game->onspr, sfWhite);
+    sfText_setString(game->onspr, "Sprite: ON");
+    game->onhit = sfText_create();
+    sfText_setFont(game->onhit, game->font);
+    sfText_setCharacterSize(game->onhit, 30);
+    sfText_setPosition(game->onhit, (sfVector2f){1700, 90});
+    sfText_setFillColor(game->onhit, sfWhite);
+    sfText_setString(game->onhit, "Hitbox: ON");
 }
 
 struct game set_game(char **settings)
@@ -119,7 +131,6 @@ struct game set_game(char **settings)
     game.mode = (sfVideoMode){1920, 1080, 32};
     game.window = sfRenderWindow_create(game.mode, "My_Radar",
     sfResize | sfClose, NULL);
-    game.clock = sfClock_create();
     game.hit = 1;
     game.spr = 1;
     set_text(&game);
@@ -131,5 +142,6 @@ struct game set_game(char **settings)
     set_allplane(&game, settings);
     set_alltower(&game, settings);
     free_array(settings);
+    game.clock = sfClock_create();
     return game;
 }

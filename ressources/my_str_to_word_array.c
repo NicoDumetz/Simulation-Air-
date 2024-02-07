@@ -27,7 +27,7 @@ int count_word2(char const *str)
     int compt = 0;
     int i = 0;
 
-    if ( charal2(str[0]) == 1 || charnum2(str[0]) == 1)
+    if (charal2(str[0]) == 1 || charnum2(str[0]) == 1)
         compt = 1;
     else
         compt = 0;
@@ -45,7 +45,7 @@ int word_after2(char const *str, int i)
 {
     int compt = 0;
 
-    for (i; charal2(str[i]) == 1 || charnum2(str[i]) == 1;i++) {
+    for (i; charal2(str[i]) == 1 || charnum2(str[i]) == 1; i++) {
         compt++;
     }
     return compt;
@@ -65,7 +65,7 @@ static char **set_array(char **li_final, char *str, int len)
             temp[k] = str[index];
             index++;
         }
-        if ( k >= 1) {
+        if (k >= 1) {
             temp[k] = '\0';
             li_final[col] = temp;
             col++;

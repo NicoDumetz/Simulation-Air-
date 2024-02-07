@@ -96,5 +96,7 @@ void display(struct game *game)
     display_tower(game);
     display_plane(game);
     display_time(game);
+    sfRenderWindow_drawText(game->window, game->onspr, NULL);
+    sfRenderWindow_drawText(game->window, game->onhit, NULL);
     sfRenderWindow_display(game->window);
 }
