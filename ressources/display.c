@@ -12,6 +12,15 @@ static float myabs(float a)
     return a < 0 ? -a : a;
 }
 
+static void check_destroy(struct game *game, int i)
+{
+    if (myabs(game->plane[i].pos.x - game->plane[i].posfin.x) < 5.0f &&
+        myabs(game->plane[i].pos.y - game->plane[i].posfin.y) < 5.0f) {
+        game->plane[i].actif = 0;
+        game->plane[i].delay = 0;
+    }
+}
+
 static int calculate_traj(struct game *game, int i)
 {
     sfTime deltaTime = sfClock_getElapsedTime(game->plane[i].clock);
@@ -28,11 +37,7 @@ static int calculate_traj(struct game *game, int i)
     sfSprite_setPosition(game->plane[i].sprite, game->plane[i].pos);
     sfRectangleShape_setPosition(game->plane[i].hitbox.rect, game->plane[i].
     pos);
-    if (myabs(game->plane[i].pos.x - game->plane[i].posfin.x) < 5.0f &&
-        myabs(game->plane[i].pos.y - game->plane[i].posfin.y) < 5.0f) {
-        game->plane[i].actif = 0;
-        game->plane[i].delay = 0;
-    }
+    check_destroy(game, i);
     sfClock_restart(game->plane[i].clock);
     return 0;
 }
@@ -68,10 +73,28 @@ static void display_tower(struct game *game)
     }
 }
 
+static void display_time(struct game *game)
+{
+    sfTime elapsed = sfClock_getElapsedTime(game->clock);
+    float val = sfTime_asSeconds(elapsed);
+    char buffer[100];
+    int min = (int)(val / 60);
+    int sec = (int)(val) % 60;
+
+    buffer[0] = '\0';
+    my_strcat(buffer, "Time ");
+    my_strcat(buffer, int_to_str(min));
+    my_strcat(buffer, ":");
+    my_strcat(buffer, int_to_str(sec));
+    sfText_setString(game->time, buffer);
+    sfRenderWindow_drawText(game->window, game->time, NULL);
+}
+
 void display(struct game *game)
 {
     sfRenderWindow_drawSprite(game->window, game->background.sprite, NULL);
     display_tower(game);
     display_plane(game);
+    display_time(game);
     sfRenderWindow_display(game->window);
 }

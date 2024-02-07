@@ -51,25 +51,17 @@ int word_after2(char const *str, int i)
     return compt;
 }
 
-static char **set_last2(char **li_final, char const *str, int len)
+static char **set_array(char **li_final, char *str, int len)
 {
-    li_final[len] = 0;
-    return li_final;
-}
-
-char **my_str_to_word_array(char *str)
-{
-    char **li_final;
-    char *temp;
     int index;
+    char *temp;
     int col = 0;
     int k;
-    int len = count_word2(str);
 
-    li_final = malloc((len + 1) * sizeof(char *));
     for (index = 0; str[index] != '\0' && col <= len; index++) {
         temp = malloc((word_after2(str, index) + 1) * sizeof(char *));
-        for (k = 0; charal2(str[index]) == 1 || charnum2(str[index]) == 1; k++){
+        for (k = 0; charal2(str[index]) == 1 || charnum2(str[index]) == 1; k
+        ++){
             temp[k] = str[index];
             index++;
         }
@@ -79,5 +71,16 @@ char **my_str_to_word_array(char *str)
             col++;
         }
     }
-    return set_last2(li_final, str, len);
+    return li_final;
+}
+
+char **my_str_to_word_array(char *str)
+{
+    char **li_final;
+    int len = count_word2(str);
+
+    li_final = malloc((len + 1) * sizeof(char *));
+    li_final = set_array(li_final, str, len);
+    li_final[len] = 0;
+    return li_final;
 }

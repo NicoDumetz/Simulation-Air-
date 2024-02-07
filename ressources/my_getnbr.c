@@ -79,11 +79,16 @@ char *int_to_str(int nb)
 
     if (nb == 0) {
         buffer[i] = '0';
-        i++;
+        buffer[i + 1] = '0';
+        i += 2;
     } else {
         for (i; nb != 0 && i < 100; i++) {
             buffer[i] = '0' + nb % 10;
             nb /= 10;
+        }
+        if (i == 1) {
+            buffer[i] = '0';
+            i++;
         }
     }
     buffer[i] = '\0';

@@ -40,7 +40,6 @@ static void check_delay(struct game *game)
     }
     if (end == 1)
         sfRenderWindow_close(game->window);
-
 }
 
 static void game_loop(struct game *game)
@@ -55,12 +54,35 @@ static void game_loop(struct game *game)
     }
 }
 
+void cleanup_game(struct game *g)
+{
+    sfTexture_destroy(g->background.texture);
+    sfSprite_destroy(g->background.sprite);
+    for (int i = 0; i < g->nbr_tower; i++) {
+        sfTexture_destroy(g->tower[i].texture);
+        sfSprite_destroy(g->tower[i].sprite);
+        sfCircleShape_destroy(g->tower[i].hitbox.circle);
+    }
+    free(g->tower);
+    for (int i = 0; i < g->nbr_plane; i++) {
+        sfTexture_destroy(g->plane[i].texture);
+        sfSprite_destroy(g->plane[i].sprite);
+        sfClock_destroy(g->plane[i].clock);
+        sfRectangleShape_destroy(g->plane[i].hitbox.rect);
+    }
+    free(g->plane);
+    sfFont_destroy(g->font);
+    sfText_destroy(g->time);
+    sfRenderWindow_destroy(g->window);
+    sfClock_destroy(g->clock);
+}
+
 int my_radar(char **settings)
 {
     struct game game = set_game(settings);
 
     sfRenderWindow_setFramerateLimit(game.window, 60);
     game_loop(&game);
-    sfRenderWindow_destroy(game.window);
+    cleanup_game(&game);
     return 0;
 }

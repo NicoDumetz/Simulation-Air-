@@ -60,6 +60,8 @@ typedef struct game {
     sprite *tower;
     sprite *plane;
     sfClock *clock;
+    sfText *time;
+    sfFont* font;
     int hit;
     int spr;
     int nbr_plane;
@@ -80,5 +82,7 @@ void check_colision_plane(struct game *game);
 void check_tower_col(struct game *game);
 sfVector2f *set_rotation(sfVector2f *cornersrect, float get_angle,
     sfVector2f pos);
+char *int_to_str(int nb);
+void free_array(char **arr);
 
 #endif

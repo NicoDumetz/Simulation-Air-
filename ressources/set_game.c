@@ -57,7 +57,7 @@ static void set_alltower(struct game *game, char **settings)
     }
 }
 
-static void set_hitbox_plane(struct game *game, int i)
+static int set_hitbox_plane(struct game *game, int i)
 {
     game->plane[i].angle = atan2(game->plane[i].posfin.y -
     game->plane[i].pos.y, game->plane[i].posfin.x -
@@ -75,6 +75,7 @@ static void set_hitbox_plane(struct game *game, int i)
     sfRectangleShape_setFillColor(game->plane[i].hitbox.rect, (sfColor)
     {0, 0, 0, 0});
     sfRectangleShape_rotate(game->plane[i].hitbox.rect, game->plane[i].angle);
+    return 7;
 }
 
 static void set_allplane(struct game *game, char **settings)
@@ -97,9 +98,18 @@ static void set_allplane(struct game *game, char **settings)
         sfSprite_setScale(game->plane[i].sprite, game->plane[i].scale);
         sfSprite_setTexture(game->plane[i].sprite, game->plane[i].texture,
         sfTrue);
-        set_hitbox_plane(game, i);
-        j += 7;
+        j += set_hitbox_plane(game, i);
     }
+}
+
+static void set_text(struct game *game)
+{
+    game->font = sfFont_createFromFile("font/arial.ttf");
+    game->time = sfText_create();
+    sfText_setFont(game->time, game->font);
+    sfText_setCharacterSize(game->time, 30);
+    sfText_setPosition(game->time, (sfVector2f){1750, 10});
+    sfText_setFillColor(game->time, sfWhite);
 }
 
 struct game set_game(char **settings)
@@ -112,6 +122,7 @@ struct game set_game(char **settings)
     game.clock = sfClock_create();
     game.hit = 1;
     game.spr = 1;
+    set_text(&game);
     game.nbr_plane = compt_plane(settings);
     game.nbr_tower = compt_tower(settings);
     game.plane = malloc(sizeof(sprite) * (game.nbr_plane + 1));
@@ -119,5 +130,6 @@ struct game set_game(char **settings)
     set_background(&game);
     set_allplane(&game, settings);
     set_alltower(&game, settings);
+    free_array(settings);
     return game;
 }

@@ -82,7 +82,8 @@ int colision_plane(sfRectangleShape *rect1, sfRectangleShape *rect2)
 
 static void set_actif(struct game *game, int i, int j)
 {
-    if (game->plane[j].actif && game->plane[i].actif && (game->plane[j].tower_check == 0 || game->plane[i].tower_check == 0)) {
+    if (game->plane[j].actif && game->plane[i].actif && (game->plane[j].
+    tower_check == 0 || game->plane[i].tower_check == 0)) {
         if (colision_plane(game->plane[j].hitbox.rect, game->plane[i].
         hitbox.rect) == 1) {
             game->plane[j].actif = 0;

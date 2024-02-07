@@ -51,11 +51,52 @@ static char **open_script(char **av)
     return settings;
 }
 
+static int verify_file(char **av)
+{
+    int fd;
+    char *str = malloc(get_size(av) + 1);
+
+    for (int i = 0; i < get_size(av) + 1; i++)
+        str[i] = '\0';
+    fd = open(av[1], O_RDONLY);
+    if (str == NULL || fd == -1) {
+        write(0, "error with script", 17);
+        return 84;
+    }
+    if (read(fd, str, get_size(av) + 1) == -1) {
+        write(0, "error with script", 17);
+        return 84;
+    }
+    close(fd);
+    free(str);
+}
+
+static int readme(void)
+{
+    write(1, "Air traffic simulation panel\n\n", 30);
+    write(1, "USAGE\n ./my_radar [OPTIONS] path_to_script\n", 43);
+    write(1, "  path_to_script    The path to the script file.\n\n", 50);
+    write(1, "OPTIONS\n -h                print the usage and quit.\n\n", 54);
+    write(1, "USER INTERACTIONS\n", 18);
+    write(1, " ‘L’ key enable/disable hitboxes and areas.\n", 48);
+    write(1, " ‘S’ key enable/disable sprites.\n", 37);
+    return 0;
+}
+
+void free_array(char **arr)
+{
+    for (int i = 0; arr[i]; ++i)
+        free(arr[i]);
+    free(arr);
+}
+
 int main(int ac, char **av, char **env)
 {
     char **settings;
 
-    if (check_env(env) == 84)
+    if (ac == 2 && av[1][0] == '-' && av[1][1] == 'h')
+        return readme();
+    if (check_env(env) == 84 || ac != 2 || verify_file(av) == 84)
         return 84;
     settings = open_script(av);
     return my_radar(settings);
