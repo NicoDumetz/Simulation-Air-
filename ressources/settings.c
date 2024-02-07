@@ -71,12 +71,18 @@ static int ver_plane_tower(char **settings, int *i)
 int verify_instr(char **settings)
 {
     for (int i = 0; settings[i];) {
-        if (settings[i][0] != 'A' && settings[i][0] != 'T')
+        if (settings[i][0] != 'A' && settings[i][0] != 'T') {
+            write(0, "error with script", 17);
             return 84;
-        if (ver_plane_tower(settings, &i) == 84)
+        }
+        if (ver_plane_tower(settings, &i) == 84) {
+            write(0, "error with script", 17);
             return 84;
+        }
     }
-    if (compt_plane(settings) > 10500)
+    if (compt_plane(settings) > 10500) {
+        write(0, "too many planes", 16);
         return 84;
+    }
     return 0;
 }
