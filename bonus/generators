@@ -1,0 +1,43 @@
+from random import randint
+import sys
+
+def generate_line(argv):
+    first_number = randint(1, 1920)
+    second_number = randint(1, 1080)
+    third_number = randint(1, 1920)
+    fourth_number = randint(1, 1080)
+    last_number = randint(1, 99)
+    if (argv[3] == '1'):
+       time = 0
+    else:
+        time = randint(1,10)
+    return f"A {first_number} {second_number} {third_number} {fourth_number} {last_number} {time}"
+
+def generate_tower():
+    first_number = randint(1, 1920)
+    second_number = randint(1, 1080)
+    last_number = randint(1, 10)
+
+    return f"T {first_number} {second_number} {last_number}"
+
+def readme():
+    print("USAGE")
+    print("     python3 -p -t > file.txt")
+    print("DESCRIPTION")
+    print("     -p numbers of planes\n     -t numbers of tower -0 for time 0 1 for random time:")
+    print("Nicolas >>>>")
+    return 0
+
+def main(argv):
+    if (len(argv) == 1):
+        return readme()
+    lines = [generate_line(argv) for _ in range(int(argv[1]))]
+    tower = [generate_tower() for _ in range(int(argv[2]))]
+
+    for line in lines:
+        print(line)
+    for line in tower:
+        print(line)
+
+if __name__ == "__main__":
+    main(sys.argv)
