@@ -13,8 +13,9 @@ SRC	=	main.c \
 		ressources/my_str_to_word_array.c \
 		ressources/my_strcat.c \
 		ressources/my_strlen.c \
-		ressources/settings.c
-
+		ressources/settings.c \
+		ressources/colision_plane.c \
+		ressources/colision_tower.c
 
 OBJ	=	$(SRC:.c=.o)
 

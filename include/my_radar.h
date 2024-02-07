@@ -30,7 +30,7 @@
 typedef struct hitbox {
     sfRectangleShape *rect;
     sfVector2f size;
-    sfCircleShape* circle;
+    sfCircleShape *circle;
     float radius;
     sfVector2f pos;
     int actif;
@@ -47,6 +47,8 @@ typedef struct sprite {
     hitbox hitbox;
     int actif;
     int speed;
+    float angle;
+    int tower_check;
 } sprite;
 
 typedef struct game {
@@ -72,7 +74,9 @@ int my_getnbr(char const *str);
 char **my_str_to_word_array(char const *str);
 int compt_plane(char **settings);
 int compt_tower(char **settings);
-
-
-
+void check_colision_plane(struct game *game);
+void check_tower_col(struct game *game);
+void reset_tower_col(struct game *game);
+sfVector2f *set_rotation(sfVector2f *cornersrect, float get_angle,
+    sfVector2f pos);
 #endif

@@ -45,7 +45,7 @@ static void display_hitplane(struct game *game, int i)
 static void display_plane(struct game *game)
 {
     for (int i = 0; i < game->nbr_plane; i++) {
-        if (calculate_traj(game, i) == 0 && game->plane[i].actif == 1) {
+        if (game->plane[i].actif == 1 && calculate_traj(game, i) == 0) {
             sfRenderWindow_drawSprite(game->window, game->plane[i].sprite,
             NULL);
             display_hitplane(game, i);

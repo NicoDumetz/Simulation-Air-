@@ -24,6 +24,9 @@ static void game_loop(struct game *game)
 {
     while (sfRenderWindow_isOpen(game->window)) {
         pop_event(game);
+        reset_tower_col(game);
+        check_tower_col(game);
+        check_colision_plane(game);
         sfRenderWindow_clear(game->window, sfBlack);
         display(game);
     }

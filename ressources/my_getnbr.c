@@ -39,7 +39,7 @@ int my_getnbr(char const *str)
     int sign = 1;
     long res = 0;
 
-    if ( setup(str) == 1)
+    if ( str == NULL || setup(str) == 1)
         return 0;
     while ( str[i] == '+' || str[i] == '-' ) {
         sign = varsign(sign, str, i);

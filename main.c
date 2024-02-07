@@ -24,18 +24,30 @@ static int check_env(char **env)
     return 84;
 }
 
+static int get_size(char **av)
+{
+    struct stat file;
+    int size;
+
+    if (stat(av[1], &file) == -1)
+        return 84;
+    size = file.st_size;
+    return size;
+}
+
 static char **open_script(char **av)
 {
     int fd;
-    char *str = malloc(100000);
+    char *str = malloc(get_size(av) + 1);
     char **settings;
 
-    for (int i = 0; i < 100000; i++)
+    for (int i = 0; i < get_size(av) + 1; i++)
         str[i] = '\0';
     fd = open(av[1], O_RDONLY);
-    read(fd, str, 100000);
+    read(fd, str, get_size(av) + 1);
     settings = my_str_to_word_array(str);
     close(fd);
+    free(str);
     return settings;
 }
 
