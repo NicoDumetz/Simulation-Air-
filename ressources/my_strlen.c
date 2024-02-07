@@ -12,7 +12,7 @@ int my_strlen(char const *str)
     int compt;
 
     compt = 0;
-    for ( index = 0; str[index] != '\0'; index++) {
+    for (index = 0; str[index] != '\0'; index++) {
         compt++;
     }
     return compt;
